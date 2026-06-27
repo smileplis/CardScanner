@@ -1,6 +1,6 @@
 {
   "name": "Business Card Scanner",
   "description": "Scan business cards, extract contact details, and export to CSV.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["camera"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

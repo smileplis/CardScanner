@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Upload, FileDown, Trash2, Loader2, Scan, Building2, User, Phone, Mail, Globe, MapPin, X, CreditCard } from 'lucide-react';
+import { Upload, FileDown, Trash2, Loader2, Scan, Building2, User, Phone, Mail, Globe, MapPin, X, CreditCard, Camera } from 'lucide-react';
 import { BusinessCard } from './types';
 import { fileToBase64, generateCSV, downloadCSV } from './utils';
 import { motion, AnimatePresence } from 'motion/react';
+import CameraView from './components/CameraView';
 
 export default function App() {
   const [cards, setCards] = useState<BusinessCard[]>([]);
   const [isScanning, setIsScanning] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showCamera, setShowCamera] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -221,6 +223,18 @@ export default function App() {
               )}
             </div>
             
+            {!isScanning && (
+              <div className="flex justify-center mt-4">
+                <button
+                  onClick={() => setShowCamera(true)}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                >
+                  <Camera className="w-4 h-4" />
+                  Use Camera
+                </button>
+              </div>
+            )}
+            
             <AnimatePresence>
               {error && (
                 <motion.div
@@ -295,6 +309,17 @@ export default function App() {
           </section>
         </div>
       </main>
+
+      {/* Camera Overlay */}
+      {showCamera && (
+        <CameraView
+          onClose={() => setShowCamera(false)}
+          onCapture={(file) => {
+            setShowCamera(false);
+            processFiles([file]);
+          }}
+        />
+      )}
 
       {/* Bottom Status Bar */}
       <footer className="h-10 bg-white border-t border-gray-200 px-6 flex items-center justify-between text-[11px] text-gray-400 shrink-0">
